@@ -1,0 +1,79 @@
+body > .container {
+  top: 50px;
+  position: relative;
+}
+
+label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.form-select,
+.form-control {
+  margin-top: -5px;
+  margin-bottom: 5px;
+}
+
+.btn-group {
+  padding-right: 5px;
+}
+
+textarea {
+  height: 100%;
+  resize: none;
+}
+
+.char_scroll,
+.main_scroll {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.char_scroll {
+  height: 290%;
+}
+
+body::-webkit-scrollbar,
+.modal::-webkit-scrollbar,
+.char_scroll::-webkit-scrollbar,
+.main_scroll::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.row.box {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.box {
+  margin-bottom: 10px;
+  height: 410px;
+  width: 100%;
+  border: 4px solid #467bb7;
+  border-radius: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.instructions {
+  position: relative;
+  text-align: center;
+}
+
+.instructions input,
+.instructions button {
+  max-width: 106px;
+  display: inline-block;
+}
+
+.instructions .bhvr {
+  max-width: 250px;
+}
+
+.instructions button {
+  max-width: 80px;
+}

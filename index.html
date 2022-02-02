@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dead By Daylight - Save Editor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-nightshade.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container instructions" id="instructions">
+      <label>Large Files can take more time to load!</p>
+      Drag a save file here (e.g. FullProfile.txt)<br/>
+      or select one here:</label><br/>
+      <input type="file" id="LoadSaveGame" class="form-control" />
+      </p>
+      <div id="col-bhvrSession" style="display: none">
+        <label>Or with bhvrSession, unlock injector features:<br/>
+          <label class="text-danger">THIS WILL USING A PROXY, SO THE IP IS DEDICATED!</label>
+        </label>
+        <br/>
+        <input type="text" id="text-bhvrSession" class="form-control bhvr">&nbsp;
+        <button type="button" id="login-bhvrSession" class="form-control btn-danger">Login</input>
+      </div>
+    </div>
+    <div class="container" id="FullProfile" style="display: none">
+      <div class="row">
+        <div class="col offset-md-1">
+          <label class="navbar-text" id="selected-characters">Dead By Daylight - Save Editor</label>
+        </div>
+        <div class="col">
+          <ul class="nav justify-content-end">
+            <div id="form-bhvrlive" class="btn-group" style="display: none">
+                <button type="button" onclick="injectSaveGame()" class="btn btn-danger" data-bs-toggle="modal">Inject Profile</button>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dropdown-toggle" id="label-survivor" data-bs-toggle="dropdown" aria-expanded="false">Survivor</button>
+              <ul class="dropdown-menu dropdown-menu-dark char_scroll" id="survivor"></ul>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dropdown-toggle" id="label-killer" data-bs-toggle="dropdown" aria-expanded="false">Killer</button>
+              <ul class="dropdown-menu dropdown-menu-dark char_scroll" id="killer"></ul>
+            </div>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="d-flex align-items-start">
+          <div class="col-md-1">
+            <div class="nav flex-column nav-pills me-3" role="tablist" aria-orientation="vertical">
+              <button class="nav-link active" id="main-tab" data-bs-toggle="pill" data-bs-target="#main" type="button" role="tab" aria-controls="main" aria-selected="true">Main</button>
+              <button class="nav-link" id="level-tab" style="display: none" data-bs-toggle="pill" data-bs-target="#level" type="button" role="tab" aria-controls="perks" aria-selected="false">Level</button>
+              <button class="nav-link" id="perks-tab" style="display: none" data-bs-toggle="pill" data-bs-target="#perks" type="button" role="tab" aria-controls="perks" aria-selected="false">Perks</button>
+              <button class="nav-link" id="items-tab" style="display: none" data-bs-toggle="pill" data-bs-target="#items" type="button" role="tab" aria-controls="items" aria-selected="false">Items</button>
+              <button class="nav-link" id="addons-tab" style="display: none" data-bs-toggle="pill" data-bs-target="#addons" type="button" role="tab" aria-controls="addons" aria-selected="false">Addons</button>
+              <button class="nav-link" id="offerings-tab" style="display: none" data-bs-toggle="pill" data-bs-target="#offerings" type="button" role="tab" aria-controls="offerings" aria-selected="false">Offerings</button>
+              <button class="nav-link" id="others-tab" style="display: none" data-bs-toggle="pill" data-bs-target="#others" type="button" role="tab" aria-controls="others" aria-selected="false">Others</button>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row box tab-content">
+              <div class="col-sm-12 main_scroll tab-pane show active" id="main" role="tabpanel" aria-labelledby="main-tab"></div>
+              <div class="col-sm-12 main_scroll tab-pane" id="level" role="tabpanel" aria-labelledby="level-tab"></div>
+              <div class="col-sm-12 main_scroll tab-pane" id="perks" role="tabpanel" aria-labelledby="perks-tab"></div>
+              <div class="col-sm-12 main_scroll tab-pane" id="items" role="tabpanel" aria-labelledby="items-tab"></div>
+              <div class="col-sm-12 main_scroll tab-pane" id="addons" role="tabpanel" aria-labelledby="addons-tab"></div>
+              <div class="col-sm-12 main_scroll tab-pane" id="offerings" role="tabpanel" aria-labelledby="offerings-tab"></div>
+              <div class="col-sm-12 main_scroll tab-pane" id="others" role="tabpanel" aria-labelledby="others-tab"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-11 offset-md-1">
+          <div class="nav justify-content-end">
+            <!-- <div class="btn-group">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-showFilter">Filter</button>
+            </div> -->
+            <div class="btn-group">
+              <button type="button" onclick="modalShowGenerator('show')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-showGenerator">Generator</button>
+            </div>
+            <div class="btn-group">
+              <button type="button" onclick="modalShowJson('show')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-showJson">Show JSON</button>
+            </div>
+            <div class="btn-group">
+              <button onclick="download()" class="btn btn-primary pull-right">Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="modal-showFilter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Filter</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div id="modal-bodyFilter" class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Apply Changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="modal-showGenerator" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Custom Generator</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-center">Please using Ctrl+F for fast searching, and Page UP/Down for fast scrolling</p>
+            <form id="modal-bodyGenerator" class="col"></form>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" onclick="modalShowGenerator('apply')" class="btn btn-primary" data-bs-dismiss="modal">Apply Changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="modal-showJson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">JSON Editor</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <textarea id="showjson" rows="20" class="form-control"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="modalShowJson('apply')" class="btn btn-primary" data-bs-dismiss="modal">Apply Changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jmespath@0.16.0/jmespath.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.2/base64.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pako@2.0.4/dist/pako.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aes-js@3.1.2/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/js/darkmode.min.js"></script>
+    <script src="js/database/addons.js"></script>
+    <script src="js/database/characters.js"></script>
+    <script src="js/database/items.js"></script>
+    <script src="js/database/offerings.js"></script>
+    <script src="js/database/perks.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/bhvrlive.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

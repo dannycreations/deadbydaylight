@@ -18,6 +18,7 @@ let query, charKey
 
 function updateSaveGame(obj, ljson = json) {
   try {
+    let lvalue
     const parseTypeData = (ori, sec) => {
       switch (typeof ori) {
         case "boolean":
@@ -28,28 +29,31 @@ function updateSaveGame(obj, ljson = json) {
           return sec
       }
     }
+    const verifyInputNumber = () => {
+      let number = ""
+      for (const num of obj.value.split("")) {
+        if (num >= 0 && num <= 9) number += num
+      }
+      if (!number.length) obj.value = obj.max || obj.min
+      if (parseInt(number) > parseInt(obj.max)) obj.value = obj.max
+      if (parseInt(number) < parseInt(obj.min)) obj.value = obj.min
+    }
     ljson = jmespath.search(ljson, obj.getAttribute("data-query"))
     const lupdate = obj.getAttribute("data-update")
-    if (obj.type == "number") {
-      // not fixed yet
-      // const old = obj.getAttribute("data-old")
-      // if (old) {
-      //   if (parseInt(obj.value) >= obj.min && parseInt(obj.value) <= obj.max) {
-      //     obj.setAttribute("data-old", obj.value)
-      //   }
-      //   obj.value = obj
-      // } else obj.setAttribute("data-old", obj.value)
+    if (obj.type == "number") verifyInputNumber()
+    if (obj.type == "datetime-local") {
+      lvalue = convertDate(obj.value, obj.getAttribute("data-format"))
     }
     if (_.includes(lupdate, "$a")) {
       const split = lupdate.split("$a")
-      ljson[split[1]] = parseTypeData(ljson[split[1]], obj.value)
+      ljson[split[1]] = parseTypeData(ljson[split[1]], lvalue || obj.value)
     } else if (_.includes(lupdate, "$c")) {
       const split = lupdate.split("$c")[1].split(":")
       if (split.length != 2) split[1] = ""
       if (ljson.constructor === Array) {
         ljson = _.find(ljson, (r) => _.includes(r[split[0]], split[1]))
       }
-      ljson[split[0]] = parseTypeData(ljson[split[0]], `${split[1]}${obj.value}`)
+      ljson[split[0]] = parseTypeData(ljson[split[0]], `${split[1]}${lvalue || obj.value}`)
     } else if (_.includes(lupdate, "$p")) {
       const split = lupdate.split("$p")[1].split(":")
       const find = _.find(ljson, (r) => _.includes(r[split[0]], obj.id))
@@ -70,7 +74,7 @@ function updateSaveGame(obj, ljson = json) {
 
 function generateDate(char, type, inc) {
   const LEGACY_DATE = "2016-11-24"
-  const DEFAULT_TIME = "T23:59:00.000Z"
+  const DEFAULT_TIME = "T16:59:00.000Z"
 
   let endDate, lastGen
   let startDate = `${char.release}${DEFAULT_TIME}`
@@ -93,6 +97,20 @@ function generateDate(char, type, inc) {
     randomGen.push(moment(lastGen).toISOString())
   }
   return _.sortBy(randomGen)
+}
+
+function convertDate(date, format) {
+  const FORMAT_LOCAL = "YYYY-MM-DDTHH:mm:ss.SSS"
+  const FORMAT_TIMESTAMP = "YYYY.MM.DD-HH.mm.ss"
+  if (format == "0ul") {
+    return moment(date).local().format(FORMAT_LOCAL)
+  } else if (format == "1lu") {
+    return moment(date).utc()
+  } else if (format == "0tl") {
+    return moment(date, FORMAT_TIMESTAMP).local().format(FORMAT_LOCAL)
+  } else if (format == "1lt") {
+    return moment(date).format(FORMAT_TIMESTAMP)
+  }
 }
 
 function findElementById(elements, callback) {

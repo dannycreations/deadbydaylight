@@ -39,16 +39,13 @@ function processSaveGame(data, logged) {
 
 function loadSaveGame(raw, refresh) {
   try {
+    query = ""
     if (raw) {
       if (_.includes(raw, "DbdDAgAC")) json = decrypt(raw)
       else json = JSON.parse(raw)
     }
-    if (charKey) {
-      console.log(charKey)
-      changeCharacter(charKey)
-    }
+    if (charKey >= 0) changeCharacter(charKey)
 
-    query = ""
     // Load Characters
     let survivorData = "",
       survivorCount = 0,
@@ -86,7 +83,13 @@ function loadSaveGame(raw, refresh) {
             mainData2 += `<input type="number" ${upd("@", `$c${data}`)} oninput="updateSaveGame(this)" class="form-control" min="0" value="${obj[data]}">`
             break
           case "string":
-            mainData2 += `<input type="text" ${upd("@", `$c${data}`)} oninput="updateSaveGame(this)" class="form-control" value="${obj[data]}">`
+            if (_.includes(["disconnectPenaltyTime", "lastMatchEndTime", "lastMatchStartTime", "lastKillerMatchEndTime", "lastSurvivorMatchEndTime", "ongoingGameTime"], data)) {
+              mainData2 += `<input type="datetime-local" ${upd("@", `$c${data}`)} oninput="updateSaveGame(this)" class="form-control" data-format="1lu" value="${convertDate(obj[data], "0ul")}">`
+            } else if (_.includes(["lastMatchTimestamp", "lastSessionTimestamp"], data)) {
+              mainData2 += `<input type="datetime-local" ${upd("@", `$c${data}`)} oninput="updateSaveGame(this)" class="form-control" data-format="1lt" value="${convertDate(obj[data], "0tl")}">`
+            } else {
+              mainData2 += `<input type="text" ${upd("@", `$c${data}`)} oninput="updateSaveGame(this)" class="form-control" value="${obj[data]}">`
+            }
             break
         }
         const formData = '<div class="col-sm-4">{0}</div>'
@@ -127,7 +130,7 @@ function changeCharacter(key) {
           <input type="number" ${upd("", `$c${data}`)} oninput="updateSaveGame(this)" class="form-control" min="{0}" max="{1}" value="${obj[data]}">
         </div>`
         if (data == "bloodWebLevel") levelData = levelData.replace("{0}", 1).replace("{1}", 50)
-        else if (data == "prestigeLevel") levelData = levelData.replace("{0}", 1).replace("{1}", 3)
+        else if (data == "prestigeLevel") levelData = levelData.replace("{0}", 0).replace("{1}", 3)
       }
     })
 
@@ -136,7 +139,7 @@ function changeCharacter(key) {
       for (const data of obj) {
         levelData += `<div class="col-sm-4">
           <label>Prestige ${i + 1} Date</label>
-          <input type="text" ${upd("", `$a${i++}`)} oninput="updateSaveGame(this)" class="form-control" value="${data}">
+          <input type="datetime-local" ${upd("", `$a${i++}`)} oninput="updateSaveGame(this)" class="form-control" data-format="1lu" value="${convertDate(data, "0ul")}">
         </div>`
       }
     })

@@ -103,13 +103,13 @@ function convertDate(date, format) {
   const FORMAT_LOCAL = "YYYY-MM-DDTHH:mm:ss.SSS"
   const FORMAT_TIMESTAMP = "YYYY.MM.DD-HH.mm.ss"
   if (format == "0ul") {
-    return moment(date).local().format(FORMAT_LOCAL)
+    return moment.utc(date).local().format(FORMAT_LOCAL)
   } else if (format == "1lu") {
-    return moment(date).utc()
+    return moment(date).utc().toISOString()
   } else if (format == "0tl") {
-    return moment(date, FORMAT_TIMESTAMP).local().format(FORMAT_LOCAL)
+    return moment.utc(date, FORMAT_TIMESTAMP).local().format(FORMAT_LOCAL)
   } else if (format == "1lt") {
-    return moment(date).format(FORMAT_TIMESTAMP)
+    return moment(date).utc().format(FORMAT_TIMESTAMP)
   }
 }
 

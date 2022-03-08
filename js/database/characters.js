@@ -28,6 +28,7 @@ const CHARACTERS = [
   { key: 26, isKiller: false, legacy: false, release: "2021-06-15", name: "Leon S. Kennedy" },
   { key: 27, isKiller: false, legacy: false, release: "2021-10-19", name: "Mikaela Reid" },
   { key: 28, isKiller: false, legacy: false, release: "2021-11-30", name: "Jonah Vasquez" },
+  { key: 29, isKiller: false, legacy: false, release: "2022-03-08", name: "Yoichi Asakawa" },
   { key: 268435456, isKiller: true, legacy: true, release: "2016-06-14", name: "Trapper" },
   { key: 268435457, isKiller: true, legacy: true, release: "2016-06-14", name: "Wraith" },
   { key: 268435458, isKiller: true, legacy: true, release: "2016-06-14", name: "Hillbilly" },
@@ -54,4 +55,5 @@ const CHARACTERS = [
   { key: 268435479, isKiller: true, legacy: false, release: "2021-06-15", name: "Nemesis" },
   { key: 268435480, isKiller: true, legacy: false, release: "2021-09-07", name: "Pinhead" },
   { key: 268435481, isKiller: true, legacy: false, release: "2021-11-30", name: "Artist" },
+  { key: 268435482, isKiller: true, legacy: false, release: "2022-03-08", name: "Onryo" },
 ]

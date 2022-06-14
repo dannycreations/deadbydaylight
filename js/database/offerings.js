@@ -157,4 +157,6 @@ const OFFERINGS = [
   { isKiller: true, name: "WalesThemeOffering" },
   { isKiller: false, name: "WalesThemeOffering" },
   { isKiller: false, name: "WhiteWard" },
+  { isKiller: true, name: "MeteorThemeOffering" },
+  { isKiller: false, name: "MeteorThemeOffering" }
 ]

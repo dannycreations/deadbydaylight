@@ -5,6 +5,8 @@ const OFFERINGS = [
   { isKiller: false, name: "Anniversary2020Offering" },
   { isKiller: false, name: "Anniversary2021Offering" },
   { isKiller: true, name: "Anniversary2021Offering" },
+  { isKiller: false, name: "Anniversary2022Offering" },
+  { isKiller: true, name: "Anniversary2022Offering" },
   { isKiller: false, name: "AnnotatedBlueprint" },
   { isKiller: true, name: "AnnotatedBlueprint" },
   { isKiller: true, name: "ArdentRavenWreath" },
